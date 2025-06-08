@@ -1,26 +1,4 @@
-Ótima pergunta! Um bom arquivo .gitignore para um desenvolvedor Python no Ubuntu é aquele que ignora não apenas os arquivos do Python, mas também arquivos temporários e de configuração comuns no ambiente Linux/Ubuntu.
-
-A criação do arquivo e seu conteúdo não mudam por causa do sistema operacional, mas podemos otimizá-lo incluindo padrões comuns do Ubuntu.
-
-Aqui está um guia completo e um modelo que você pode usar.
-Passo 1: Criar o arquivo no Ubuntu
-
-Abra seu terminal na pasta raiz do seu projeto e crie o arquivo:
-Bash
-
-touch .gitignore
-
-Passo 2: Adicionar o conteúdo recomendado
-
-Copie e cole o conteúdo abaixo no seu arquivo .gitignore que você acabou de criar. Ele está dividido em seções e comentado para você entender o que cada parte faz.
-Snippet de código
-
-# ===================================================================
-#  .gitignore completo para Python no Ubuntu
-#  Criado por: Gemini
-#  Data: 07 de junho de 2025
-# ===================================================================
-
+# .gitignore para projetos Python
 # 1. Ambientes Virtuais
 # Essencial para não enviar centenas de megabytes de bibliotecas.
 # -------------------------------------------------------------------
