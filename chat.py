@@ -30,7 +30,6 @@ except mysql.connector.Error as err:
     print(f"ERRO FATAL de conexão com o banco de dados: {err}")
     exit() # Encerra o script se não puder conectar ao banco
 
-# PASSO 2: EXTRAÇÃO DO ESQUEMA (A "MEMÓRIA" DO AGENTE)
 # O agente lê e memoriza a estrutura do seu banco de dados.
 
 print("Lendo o esquema do banco de dados para aprender a estrutura...")
@@ -108,52 +107,52 @@ print("-" * 50)
 
 
 while True:
-        pergunta_usuario = input("\nFaça sua pergunta sobre os dados (ou digite 'sair'): ")
-        if pergunta_usuario.lower() == 'sair':
-            break
+    pergunta_usuario = input("\nFaça sua pergunta sobre os dados (ou digite 'sair'): ")
+    if pergunta_usuario.lower() == 'sair':
+        break
 
-        # Monta o prompt final
-        prompt_final = PROMPT_TEMPLATE.format(
-            schema=esquema_db, 
-            pergunta_usuario=pergunta_usuario
-        )
+    # Monta o prompt final
+    prompt_final = PROMPT_TEMPLATE.format(
+        schema=esquema_db, 
+        pergunta_usuario=pergunta_usuario
+    )
 
-        print("Gerando consulta SQL com o Gemini...")
-        response = model.generate_content(prompt_final)
-        sql_gerado = response.text.strip()
+    print("Gerando consulta SQL com o Gemini...")
+    response = model.generate_content(prompt_final)
+    sql_gerado = response.text.strip()
+    
+    if sql_gerado.startswith("ERRO"):
+        print(f"\nResposta do Agente: {sql_gerado}")
+        continue
+
+    print(f"\nSQL Gerado: \n{sql_gerado}\n")
+
+    # Executa a consulta gerada
+    print("Executando a consulta no banco de dados...")
+    try:
+        cursor = conn.cursor()
+        cursor.execute(sql_gerado)
+        resultados = cursor.fetchall()
         
-        if sql_gerado.startswith("ERRO"):
-            print(f"\nResposta do Agente: {sql_gerado}")
-            continue
-
-        print(f"\nSQL Gerado: \n{sql_gerado}\n")
-
-        # Executa a consulta gerada
-        print("Executando a consulta no banco de dados...")
-        try:
-            cursor = conn.cursor()
-            cursor.execute(sql_gerado)
-            resultados = cursor.fetchall()
+        if resultados:
+            # Imprime o cabeçalho
+            nomes_colunas = [i[0] for i in cursor.description]
+            print(" | ".join(nomes_colunas))
+            print("-" * (len(" | ".join(nomes_colunas)) + 5))
             
-            if resultados:
-                # Imprime o cabeçalho
-                nomes_colunas = [i[0] for i in cursor.description]
-                print(" | ".join(nomes_colunas))
-                print("-" * (len(" | ".join(nomes_colunas)) + 5))
-                
-                # Imprime os resultados
-                for linha in resultados:
-                    print(" | ".join(str(item) for item in linha))
-            else:
-                print("A consulta foi executada com sucesso, mas não retornou resultados.")
+            # Imprime os resultados
+            for linha in resultados:
+                print(" | ".join(str(item) for item in linha))
+        else:
+            print("A consulta foi executada com sucesso, mas não retornou resultados.")
 
-            cursor.close()
+        cursor.close()
 
-        except mysql.connector.Error as err:
-            print(f"--- ERRO AO EXECUTAR O SQL ---")
-            print(f"O SQL gerado pode ser inválido. Erro: {err}")
+    except mysql.connector.Error as err:
+        print(f"--- ERRO AO EXECUTAR O SQL ---")
+        print(f"O SQL gerado pode ser inválido. Erro: {err}")
 
-        finally:
-            if conn and conn.is_connected():
-                conn.close()
-                print("\nConexão com o banco de dados fechada.")
+# Fora do loop:
+if conn and conn.is_connected():
+    conn.close()
+    print("\nConexão com o banco de dados fechada.")
