@@ -6,10 +6,6 @@ import mysql.connector
 import psycopg2 # Importa a biblioteca para PostgreSQL
 from tabulate import tabulate
 
-# ===================================================================
-# Carrega as variáveis de ambiente e conecta aos serviços
-# ===================================================================
-
 load_dotenv()
 
 # --- Conexão com o Gemini ---
@@ -22,11 +18,8 @@ except Exception as e:
     print(f" ERRO FATAL ao conectar com o Gemini: {e}")
     sys.exit()
 
+# Entra no banco de dados MySQL e Define a função para extrair o esquema (employees)
 # ===================================================================
-# Funções Específicas para cada Banco de Dados
-# ===================================================================
-
-# --- Funções para MySQL (Employees) ---
 
 def connect_to_mysql():
     """Conecta ao banco de dados MySQL."""
@@ -59,7 +52,8 @@ def get_mysql_schema(conn):
     print("Esquema MySQL memorizado.")
     return esquema_db
 
-# --- Funções para PostgreSQL (DvdRental) ---
+# Entra no banco de dados MySQL e Define a função para extrair o esquema (dvdrental)
+# ===================================================================
 
 def connect_to_postgres():
     try:
@@ -139,10 +133,11 @@ if __name__ == "__main__":
             pergunta_usuario=pergunta_usuario
         )
 
-        print("\n⏳ Gerando consulta SQL com o Gemini...")
+        print("\n Gerando consulta SQL")
         try:
             response = model.generate_content(prompt_final)
             sql_gerado = response.text.strip().replace("```sql", "").replace("```", "") # Limpeza extra
+        
         except Exception as e:
             print(f"ERRO ao chamar a API do Gemini: {e}")
             continue
@@ -180,4 +175,4 @@ if __name__ == "__main__":
     # Fora do loop:
     if conn:
         conn.close()
-        print("\n🔌 Conexão com o banco de dados fechada.")
+        print("\n Conexão com o banco de dados fechada.")
