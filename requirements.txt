@@ -4,3 +4,4 @@ mysql-connector-python
 pillow
 tabulate
 psycopg2-binary
+flask

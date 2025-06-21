@@ -6,6 +6,28 @@ import mysql.connector
 import psycopg2 # Importa a biblioteca para PostgreSQL
 from tabulate import tabulate
 
+''' PARA O PROFESSOR:
+    Não contém no envio da atividade o arquivo .env.
+    Mas nele contém as informações de conexão com os bancos de dados MySQL e PostgreSQL,
+    além da chave de API do Gemini.
+    O arquivo .env deve ser criado com as seguintes variáveis:
+    MYSQL_DB_HOST=localhost
+    MYSQL_DB_USER=seu_usuario_mysql
+    MYSQL_DB_PASSWORD=sua_senha_mysql
+    MYSQL_DB_NAME=employees
+    PG_DB_HOST=localhost
+    PG_DB_USER=seu_usuario_postgres
+    PG_DB_PASSWORD=sua_senha_postgres
+    PG_DB_NAME=dvdrental
+    API_KEY=sua_chave_api_do_gemini
+
+    no .zip também contem os arquivos de ambiente virtual venv. não estou certo de que funiona fazendo assim. 
+    em caso negativo, usar o comando python -m venv venv para criar o ambiente virtual e source venv/bin/activate para ativar.
+    instalar as dependências com pip install -r requirements.txt.
+    configurar os bancos de dados que podem ser extraidos em samples do mysql e postgres.
+    feito isso tudo está pronto para rodar o agente.
+'''
+
 load_dotenv()
 
 # --- Conexão com o Gemini ---
@@ -91,7 +113,7 @@ def get_postgres_schema(conn):
         esquema_db += f" - {nome_coluna} ({tipo_dado})\n"
         
     cursor.close()
-    print("👍 Esquema PostgreSQL memorizado.")
+    print("Esquema PostgreSQL memorizado.")
     return esquema_db
 
 def carregar_prompt(caminho):
