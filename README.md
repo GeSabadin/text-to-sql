@@ -43,7 +43,7 @@ Este projeto transforma perguntas em linguagem natural em consultas SQL e mostra
 
    5.1 **Inicie o agente offline:**
    ```sh
-   python caht.py
+   python chat.py
    ```
 
 6. **Acesse no navegador:**  
