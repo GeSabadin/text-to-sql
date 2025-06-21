@@ -36,12 +36,12 @@ Este projeto transforma perguntas em linguagem natural em consultas SQL e mostra
    PG_DB_NAME=dvdrental(esse é o que funciona melhor pois tem queries de exemplo mas outros devem funcionar também mas a efetividade vai certamente cair)
    ```
 
-5. **Inicie o agente online:**
+5. **Inicie o agente versão web:**
    ```sh
    python app.py
    ```
 
-   5.1 **Inicie o agente offline:**
+   5.1 **Inicie o agente para usar no terminal:**
    ```sh
    python chat.py
    ```
